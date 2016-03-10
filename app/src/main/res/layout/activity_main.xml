@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,22 @@
     tools:context="com.newcool.dbmanage.dbmanage.MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
-</RelativeLayout>
+        android:id="@+id/tv_create"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="#3F51B5"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="创建更新数据库" />
+
+    <TextView
+        android:id="@+id/tv_inert_one"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="#3F51B5"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="插入一条记录" />
+</LinearLayout>
