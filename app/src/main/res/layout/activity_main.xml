@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.newcool.dbmanage.dbmanage.MainActivity">
 
     <TextView
@@ -20,6 +21,7 @@
         android:text="创建更新数据库" />
 
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/tv_inert_one"
         android:layout_width="200dp"
         android:layout_height="100dp"
@@ -28,4 +30,37 @@
         android:gravity="center"
         android:textSize="20sp"
         android:text="插入一条记录" />
-</LinearLayout>
+
+    <TextView
+    android:layout_marginTop="20dp"
+    android:id="@+id/tv_findall"
+    android:layout_width="200dp"
+    android:layout_height="100dp"
+    android:background="#3F51B5"
+    android:textColor="#fff"
+    android:gravity="center"
+    android:textSize="20sp"
+    android:text="查找全部记录" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/tv_deleteall"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="#3F51B5"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:textSize="20sp"
+    android:text="删除全部记录" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/tv_findby"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:background="#3F51B5"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="查找指定记录" />
+    </LinearLayout>

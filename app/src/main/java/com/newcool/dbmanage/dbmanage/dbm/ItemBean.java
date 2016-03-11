@@ -14,6 +14,9 @@ public class ItemBean {
         this.age = age;
     }
 
+    public ItemBean() {
+    }
+
     @Column("id")
     private String id;
     @Column("name")
@@ -22,6 +25,16 @@ public class ItemBean {
     private String tel_number;
     @Column("age")
     private String age;
+
+    @Override
+    public String toString() {
+        return "ItemBean{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", tel_number='" + tel_number + '\'' +
+                ", age='" + age + '\'' +
+                '}';
+    }
 
     public String getId() {
         return id;
