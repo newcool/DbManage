@@ -74,9 +74,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.tv_findby:
                 Map<String,String> map = new HashMap<>();
-                map.put("id","5");
-                dao.findBy(ItemBean.class,map);
-                List<ItemBean> list2 = dao.findAll(ItemBean.class);
+                map.put("id", "5");
+
+                List<ItemBean> list2 =  dao.findBy(ItemBean.class, map);
                 Log.i("niu",list2.size()+"");
                 for (ItemBean bean:list2){
                     Log.i("niu_bean",bean.toString());

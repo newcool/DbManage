@@ -65,8 +65,6 @@ public class BaseDao<T> implements Dao<T> {
                     e.printStackTrace();
                 }
             }
-
-
         }
 
         builder.append(") values (").append(placeholders).append(")");
@@ -98,10 +96,12 @@ public class BaseDao<T> implements Dao<T> {
     private List<T> getBeanListFromCursor(Class<T> clazz,Cursor cursor) {
         Field[] fields = clazz.getDeclaredFields();
         List<T> list = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor != null) {
+            int x = 0;
             while (cursor.moveToNext()) {
                 T t = null;
-
+                Log.i("niu_x",x+"");
+                x++;
                 try {
                     t = clazz.newInstance();
                 } catch (InstantiationException e) {
@@ -126,8 +126,6 @@ public class BaseDao<T> implements Dao<T> {
                             int columnIndex = cursor.getColumnIndex(column.value());
                             String str = cursor.getString(columnIndex);
 
-                            Log.i("niu_columnindex", columnIndex + "");
-                            Log.i("niu_str", str);
                             Object bj = method.invoke(t, str);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -163,14 +161,10 @@ public class BaseDao<T> implements Dao<T> {
         List<T> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("select *");
 
-        StringBuilder params = new StringBuilder("");
-
         if (clazz.isAnnotationPresent(Table.class)){
             Table table = clazz.getAnnotation(Table.class);
             sql.append(" from "+table.value()+" where ");
         }
-
-
         StringBuilder where = new StringBuilder("");
         Iterator it = map.entrySet().iterator();
         while(it.hasNext()){
@@ -182,9 +176,31 @@ public class BaseDao<T> implements Dao<T> {
         sql.append(where.substring(0, where.length() - 4));
 
         Log.i("niu_queryBY",sql.toString());
-                Cursor cursor = db.rawQuery("select * from tt_1 where id<5",null);
-//        Cursor cursor = db.rawQuery(sql.toString()+";",null);
+     //           Cursor cursor = db.rawQuery("select * from tt_1 where id<5",null);
+       Cursor cursor = db.rawQuery(sql.toString()+";",null);
         return getBeanListFromCursor(clazz,cursor);
     }
 
+    public void deleteBy(Class<T> clazz,Map<String,String> map){
+        StringBuilder sql = new StringBuilder("delete from ");
+
+        StringBuilder params = new StringBuilder("");
+
+        if (clazz.isAnnotationPresent(Table.class)){
+            Table table = clazz.getAnnotation(Table.class);
+            sql.append(table.value()+" where ");
+        }
+
+        StringBuilder where = new StringBuilder("");
+        Iterator it = map.entrySet().iterator();
+        while(it.hasNext()){
+            Map.Entry<String,String> entry = (Map.Entry<String, String>) it.next();
+
+            where.append(entry.getKey()+"="+entry.getValue()+" and ");
+        }
+        sql.append(where.substring(0, where.length() - 4));
+
+        Log.i("niu_deleteBy",sql.toString());
+        db.execSQL(sql.toString());
+    }
 }

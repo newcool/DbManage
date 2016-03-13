@@ -30,8 +30,14 @@ public interface Dao<T>{
     /**
      * 根据条件查找
      * @param clazz 查找的类型
-     * @param paramNames 要查询字段名
-     * @param param 字段对应的参数
+     * @param map 要查询字段名
      */
     public List<T> findBy(Class<T> clazz,Map<String,String> map);
+
+    /**
+     * 根据条件删除
+     * @param clazz
+     * @param map
+     */
+    public void deleteBy(Class<T> clazz,Map<String,String> map);
 }
