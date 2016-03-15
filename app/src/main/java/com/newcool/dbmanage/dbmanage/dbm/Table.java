@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
  * Created by 34721_000 on 2016/3/10.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Table {
+ @Target(ElementType.TYPE)
+ public @interface Table {
     public String value();
 }
 

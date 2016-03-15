@@ -7,6 +7,8 @@ import android.util.Log;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +23,7 @@ public class BaseDao<T> implements Dao<T> {
     public BaseDao(SQLiteDatabase db) {
         this.db = db;
     }
+
 
 
     public <T> void insert(T t) {
@@ -69,7 +72,10 @@ public class BaseDao<T> implements Dao<T> {
 
         builder.append(") values (").append(placeholders).append(")");
         Log.i("niu", builder.toString());
+        db.beginTransaction();
         db.execSQL(builder.toString(), paramList.toArray());
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
     @Override
@@ -151,7 +157,11 @@ public class BaseDao<T> implements Dao<T> {
                 sql.append(table.value());
             }
         }
+        Log.i("niu_sql",sql.toString());
+        db.beginTransaction();
         db.execSQL(sql.toString());
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 
 
@@ -176,7 +186,6 @@ public class BaseDao<T> implements Dao<T> {
         sql.append(where.substring(0, where.length() - 4));
 
         Log.i("niu_queryBY",sql.toString());
-     //           Cursor cursor = db.rawQuery("select * from tt_1 where id<5",null);
        Cursor cursor = db.rawQuery(sql.toString()+";",null);
         return getBeanListFromCursor(clazz,cursor);
     }
@@ -200,7 +209,82 @@ public class BaseDao<T> implements Dao<T> {
         }
         sql.append(where.substring(0, where.length() - 4));
 
-        Log.i("niu_deleteBy",sql.toString());
+        Log.i("niu_deleteBy", sql.toString());
+        db.beginTransaction();
         db.execSQL(sql.toString());
+        db.endTransaction();
+    }
+
+    public void insertList(List<T> list) {
+
+        if(list == null || list.size()==0) return;
+        Class clazz = list.get(0).getClass();
+
+        StringBuilder sql = new StringBuilder("insert into ");
+
+        if(clazz.isAnnotationPresent(Table.class)){
+            Table table = (Table) clazz.getAnnotation(Table.class);
+            sql.append(table.value());
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+        StringBuilder params = new StringBuilder(" (");
+        for(int i = 0;i<fields.length;i++){
+            Field f = fields[i];
+            if(f.isAnnotationPresent(Column.class)){
+                Column column = f.getAnnotation(Column.class);
+                if(i == (fields.length - 1)){
+                    params.append(column.value());
+                }else {
+                    params.append(column.value()+",");
+                }
+
+            }
+        }
+        params.append(")");
+        Log.i("niu_param",params.toString());
+
+        StringBuilder values = new StringBuilder("");
+        for(int j = 0;j<list.size();j++){
+            T t = list.get(j);
+            values.append("(");
+            for(int i = 0;i<fields.length;i++){
+                Field f = fields[i];
+                if(f.isAnnotationPresent(Column.class)){
+                    Column column = f.getAnnotation(Column.class);
+                    String fieldName = f.getName();
+                    String firstLetter = fieldName.substring(0, 1).toUpperCase();
+                    String getter = "get" + firstLetter + fieldName.substring(1);
+                    Log.i("niu_set", getter);
+                    Method setMethod = null;
+
+                    try {
+                        setMethod = clazz.getDeclaredMethod(getter);
+                        Object obj = setMethod.invoke(t);
+                        if(i == (fields.length-1)){
+                            values.append("'"+(String) obj+"'");
+                        }else {
+                            values.append("'"+(String) obj + "',");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if(j == (list.size()-1)){
+                values.append(")");
+            }else {
+                values.append("),");
+            }
+        }
+        Log.i("niu_values", values.toString());
+
+        sql.append("" + params.toString() + " values " + values.toString());
+
+        Log.i("niu_sql", sql.toString());
+        db.beginTransaction();
+        db.execSQL(sql.toString());
+        db.setTransactionSuccessful();
+        db.endTransaction();
     }
 }

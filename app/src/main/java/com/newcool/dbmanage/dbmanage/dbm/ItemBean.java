@@ -17,14 +17,15 @@ public class ItemBean {
     public ItemBean() {
     }
 
-    @Column("id")
-    private String id;
+
     @Column("name")
     private String name;
     @Column("tel_number")
     private String tel_number;
     @Column("age")
     private String age;
+    @Column("id")
+    private String id;
 
     @Override
     public String toString() {
