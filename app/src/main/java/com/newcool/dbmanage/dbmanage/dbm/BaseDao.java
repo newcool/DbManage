@@ -287,4 +287,7 @@ public class BaseDao<T> implements Dao<T> {
         db.setTransactionSuccessful();
         db.endTransaction();
     }
+
+
+
 }

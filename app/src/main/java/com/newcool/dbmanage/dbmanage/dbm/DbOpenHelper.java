@@ -32,7 +32,9 @@ public class DbOpenHelper extends SQLiteOpenHelper{
         for(int version = oldVersion+1; version<=newVersion;version++){
             switch (version){
                 case 1:
-                    db.execSQL("create table tt_1(id int not null,name varchar(10),tel_number integer)");
+                    db.execSQL("create table tt_1(id int not null,name varchar(10),tel_number varchar(20))");
+                    db.execSQL("create table t_class(id int not null auto_increment,s_num varchar(10) not null unique,name_n varchar(10),tel_number_n varchar(20))");
+                    db.execSQL("create table t_student(id int not null auto_increment,name varchar(6) not null,,FOREIGN KEY (classid) REFERENCES classes(id))");
                     break;
                 case 2:
                     db.execSQL("alter table tt_1 add age varchar(20)");
